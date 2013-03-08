@@ -1,6 +1,10 @@
 require 'pg'
 require 'rspec'
 require 'media'
+require 'street'
+require 'city'
+require 'state'
+require 'zip_code'
 
 DB = PG.connect(:dbname => 'library_test', :host => 'localhost')
 

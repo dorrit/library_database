@@ -33,24 +33,37 @@ describe Media do
     end
   end
 
-  context '.all' do
-    it 'lists all of the media in the library database' do
-      titles = ['Demian', 'Confederacy of Dunces', 'Diamond Age']
-      titles.each {|title| Media.new({'title' => title}).save}
-      Media.all.map {|media| media.title}.should =~ titles
+  context '#delete' do
+    it 'deletes a media record' do
+      attributes = {'first_name' => 'Charles', 
+                    'last_name' => 'Duhigg', 
+                    'title' => 'The Power of Habit', 
+                    'genre' => 'Non-fiction', 
+                    'subject' => 'Psychology' }
+      media = Media.new(attributes)
+      media.save
+      before_length = Media.all.length
+      media.delete
+      after_length = Media.all.length
+      after_length.should be  < before_length
+
     end
   end
 
-  context '.search' do
-    it 'takes match criteria as argument and returns matching records from any column in the media table.' do
-      media_info = {'title' => 'Demian', 'first_name' => 'Herman', 'last_name' => 'Hesse'}
-      media = Media.new(media_info)
+  context '#edit' do 
+    it 'Changes an existing record' do
+     attributes = {'first_name' => 'Charles', 
+                  'last_name' => 'Duhigg', 
+                  'title' => 'The Power of Habit', 
+                  'genre' => 'Non-fiction', 
+                  'subject' => 'Psychology' }
+      media = Media.new(attributes)
       media.save
-      first_found_media = Media.search('Hesse')[0]
-      Media.search('Hesse').each { |media| p media.print_record }
-      first_found_media.title.should eq 'Demian'  
+      media.edit('title', 'Power of Habit')
+      media = Media.search('Power of Habit')[0]
+      media.title.should eq "Power of Habit"
+
     end
-    it 'takes match criteria and an optional column name as arguments and returns matching records from the media table, in only that column name.'
   end
 
   context '#print_record' do
@@ -65,4 +78,25 @@ describe Media do
       media.print_record.should eq "Charles Duhigg, The Power of Habit, Non-fiction, Psychology"
     end
   end
+
+  context '.all' do
+    it 'lists all of the media in the library database' do
+      titles = ['Demian', 'Confederacy of Dunces', 'Diamond Age']
+      titles.each {|title| Media.new({'title' => title}).save}
+      Media.all.map {|media| media.title}.should =~ titles
+    end
+  end
+
+  context '.search' do
+    it 'takes match criteria as argument and returns matching records from any column in the media table.' do
+      media_info = {'title' => 'Demian', 'first_name' => 'Herman', 'last_name' => 'Hesse'}
+      media = Media.new(media_info)
+      media.save
+      first_found_media = Media.search('Hesse')[0]
+      first_found_media.title.should eq 'Demian'  
+    end
+    #it 'takes match criteria and an optional column name as arguments and returns matching records from the media table, in only that column name.'
+  end
+
+
 end
