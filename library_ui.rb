@@ -87,7 +87,6 @@ def check_out
  check_out if gets.chomp == 'y'
 end
   
-end
 def add 
   puts "\n\nWhat title would you like to add?"
   title = gets.chomp
